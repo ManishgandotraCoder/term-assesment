@@ -28,7 +28,7 @@ const RestaurantComponentContainer = ({ search, count, sort, passFields , getCou
 
         <div className="container mx-auto p-4 " >
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-4 mt-14">
                 <div>
                     <select value={count} onChange={(e) => passFields('count', +e.target.value)}
                         id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">

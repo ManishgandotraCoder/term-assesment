@@ -76,7 +76,7 @@ const GridLayout = ({ records, count, sort, sendCount, search }: any) => {
       }
     }
 
-    
+
 
     if (page === 1) {
       let __newRecord = data.slice(0, count)
@@ -88,9 +88,9 @@ const GridLayout = ({ records, count, sort, sendCount, search }: any) => {
       setItems((prevItems): any => [...prevItems, ...___newRecord]);
       sendCount(___newRecord.length + items.length)
     }
-    setTimeout(()=>{
+    setTimeout(() => {
       setLoading(false);
-    },5000)
+    }, 5000)
   };
 
   const handleScroll = () => {
@@ -101,12 +101,20 @@ const GridLayout = ({ records, count, sort, sendCount, search }: any) => {
       setPage((prevPage) => prevPage + 1);
     }
   };
+
   return (
     <>
       <div style={{ marginTop: "20px" }} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4" >
-        {items.map((record: any) => (
-          <ItemComponent key={record.id} data={record.cellValues
-          } />
+        {items.map((record: any, index) => (
+          <div
+            key={index}
+            className="grid-item"
+            aria-rowindex={index}
+            tabIndex={index+2}
+            >
+            <ItemComponent key={record.id} data={record.cellValues}/>
+
+          </div>
         ))}
       </div>
       {loading &&
