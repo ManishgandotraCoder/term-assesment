@@ -21,6 +21,7 @@
 .rating {
     font-size: 0.8rem;
     background: green;
+    color: white;
     padding-top: 1px;
     padding-bottom: 1px;
     padding-left: 6px;
@@ -58,13 +59,14 @@
     border: 1px solid rgb(227, 226, 226);
     background: white;
     padding-bottom: 15px;
+    cursor: pointer;
 }
 .address {
     line-height: 1.2;
     margin-block-end: 0px;
     text-align: left;
     font-size: 0.8rem;
-    color: rgb(28, 28, 28);
+    color: rgb(255, 255, 255);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
