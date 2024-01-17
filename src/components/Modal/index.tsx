@@ -1,6 +1,21 @@
 import React from "react";
 
-export default function Modal({ show, showModalCallback, data }: { data: any, show: boolean, showModalCallback: Function }) {
+interface ModalType {
+    data: {
+        restaurant: string,
+        avg_ratings: string,
+        food_type: string,
+        total_ratings: string,
+        delivery_time: string,
+        price: string,
+        address: string,
+        area: string,
+        city: string
+    },
+    show: boolean,
+    showModalCallback: Function
+}
+export default function Modal({ show, showModalCallback, data }: ModalType) {
 
     return (
         <>
@@ -29,7 +44,7 @@ export default function Modal({ show, showModalCallback, data }: { data: any, sh
                                     </button>
                                 </div>
                                 {/*body*/}
-                                
+
                                 <div className="relative pl-5 pr-5 pt-2 flex-auto">
                                     <p className="my-2 text-blueGray-500 text-lg leading-relaxed">
                                         Price : {data.price}₹
@@ -40,13 +55,13 @@ export default function Modal({ show, showModalCallback, data }: { data: any, sh
                                         Food Type : {data.food_type}
                                     </p>
                                 </div>
-                               
-                                
+
+
                                 <div className="relative pl-5 pr-5 pt-2 flex-auto">
                                     <p className="my-1 text-blueGray-500 text-lg leading-relaxed">
                                         Delivery time : {data.delivery_time} minutes
                                     </p>
-                                </div> 
+                                </div>
                                 <div className="relative pl-5 pr-5 pt-1 flex-auto">
                                     <p className="my-1 text-blueGray-500 text-lg leading-relaxed">
                                         Address : {data.address} , {data.area} , {data.city}

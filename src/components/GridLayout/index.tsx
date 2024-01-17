@@ -1,8 +1,28 @@
 import ItemComponent from 'components/Item';
 import LoaderComponent from 'components/Loader';
 import React, { useEffect } from 'react';
-
-const GridLayout = ({ records, count, sort, sendCount, search }: any) => {
+interface GridLayoutType {
+  count: number,
+  sort: string,
+  sendCount: Function,
+  search: string,
+  records: any
+}
+interface listType {
+  id: string,
+  cellValues: {
+    restaurant: string,
+    avg_ratings: string,
+    food_type: string,
+    total_ratings: string,
+    delivery_time: string,
+    price: string,
+    address: string,
+    area: string,
+    city: string
+  }
+}
+const GridLayout = ({ records, count, sort, sendCount, search }: GridLayoutType) => {
 
   const [page, setPage] = React.useState(1);
   const [loading, setLoading] = React.useState(false);
@@ -22,10 +42,9 @@ const GridLayout = ({ records, count, sort, sendCount, search }: any) => {
   function filterData() {
     return records
       .data
-      .filter((item: any) =>
+      .filter((item: listType) =>
         (item.cellValues.restaurant.toLowerCase().includes(search.toLowerCase()))
       )
-
   }
   useEffect(() => {
     setPage(1)
@@ -37,7 +56,7 @@ const GridLayout = ({ records, count, sort, sendCount, search }: any) => {
     return records.data.sort((a: any, b: any) => {
 
       let fa = +a.cellValues[sort];
-      let fb = +b.cellValues[sort];
+      let fb = +b.cellValues[sort]
       if (sort === 'restaurant') {
         fa = a.cellValues[sort].toLowerCase().trim()
         fb = b.cellValues[sort].toLowerCase().trim();
@@ -63,7 +82,7 @@ const GridLayout = ({ records, count, sort, sendCount, search }: any) => {
   }
   const fetchData = async (page: number) => {
     setLoading(true);
-    let data = records.data
+    let data: any = records.data
     if (sort && search) {
       data = await sortArray()
       data = await filterData()
@@ -85,7 +104,7 @@ const GridLayout = ({ records, count, sort, sendCount, search }: any) => {
     }
     else {
       let ___newRecord = data.slice(((page ? page - 1 : page) * count), (page * count))
-      setItems((prevItems): any => [...prevItems, ...___newRecord]);
+      setItems((prevItems):any => [...prevItems, ...___newRecord]);
       sendCount(___newRecord.length + items.length)
     }
     setTimeout(() => {
@@ -105,14 +124,14 @@ const GridLayout = ({ records, count, sort, sendCount, search }: any) => {
   return (
     <>
       <div style={{ marginTop: "20px" }} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4" >
-        {items.map((record: any, index) => (
+        {items.map((record: listType, index) => (
           <div
             key={index}
             className="grid-item"
             aria-rowindex={index}
-            tabIndex={index+2}
-            >
-            <ItemComponent key={record.id} data={record.cellValues}/>
+            tabIndex={index + 2}
+          >
+            <ItemComponent data={record.cellValues} />
 
           </div>
         ))}

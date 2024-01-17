@@ -4,7 +4,7 @@ import RestaurantComponentContainer from "./container";
 const RestaurantComponent = () => {
     const [counter, setCounter] = useState(0)
     const [fields, setFields] = useState({
-        count: 25, sort: '',  search: ''
+        count: 50, sort: '',  search: ''
     })
     const passFields = (type: string, count: number) => {
         setFields({ ...fields, [type]: count });
