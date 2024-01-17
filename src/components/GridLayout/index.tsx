@@ -1,5 +1,5 @@
+import ItemComponent from 'components/Item';
 import React, { useEffect } from 'react';
-import Record from './GridItem';
 
 const GridLayout = ({ records, count, sort, sendCount, search }: any) => {
   const [page, setPage] = React.useState(1);
@@ -90,7 +90,7 @@ const GridLayout = ({ records, count, sort, sendCount, search }: any) => {
     <>
       <div style={{ marginTop: "20px" }} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4" >
         {items.map((record: any) => (
-          <Record key={record.id} data={record.cellValues
+          <ItemComponent key={record.id} data={record.cellValues
           } />
         ))}
 

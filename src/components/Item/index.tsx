@@ -1,6 +1,6 @@
 import React from 'react';
-import './index.css'
-const Record = ({ id, data }: any) => {
+import './style.css'
+const ItemComponent = ({ id, data }: any) => {
 
   return (
     <>
@@ -21,4 +21,4 @@ const Record = ({ id, data }: any) => {
   );
 };
 
-export default Record;
+export default ItemComponent;

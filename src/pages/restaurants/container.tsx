@@ -1,5 +1,5 @@
+import GridLayout from "components/GridLayout";
 import data from "../../products.json"
-import GridLayout from 'components/Grid';
 const RestaurantComponentContainer = ({ search, count, sort, passFields , getCount, counter}: {counter: number, getCount: Function,search: string, count: number, sort: string,  passFields: Function }) => {
     return (<><div style={{ background: "#F5F5F5" }}>
 
