@@ -66,23 +66,15 @@ const GridLayout = ({ records, count, sort, sendCount, search }: any) => {
   const fetchData = async (page: number) => {
 
     let data = records.data
-    console.log(data[0]);
-
     if (sort && search) {
-
       data = await sortArray()
-      console.log(data[0]);
-
       data = await filterData()
-      console.log(data[0]);
     }
     if (sort) {
       data = await sortArray()
-      console.log(data[0]);
     }
     if (search) {
       data = await filterData()
-      console.log(data[0]);
     }
 
     setLoading(true);
