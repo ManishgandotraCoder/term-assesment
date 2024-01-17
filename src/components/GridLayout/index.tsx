@@ -2,6 +2,7 @@ import ItemComponent from 'components/Item';
 import React, { useEffect } from 'react';
 
 const GridLayout = ({ records, count, sort, sendCount, search }: any) => {
+
   const [page, setPage] = React.useState(1);
   const [loading, setLoading] = React.useState(false);
   const [items, setItems] = React.useState([]);
@@ -32,36 +33,57 @@ const GridLayout = ({ records, count, sort, sendCount, search }: any) => {
   }, [count, sort, search])
 
   const sortArray = () => {
-    console.log(sort);
 
     return records.data.sort((a: any, b: any) => {
-      let fa = a.cellValues[+sort];
-      let fb = b.cellValues[+sort];
-      if (sort === 'name') {
-        fa = a.cellValues[+sort].toLowerCase()
-        fb = b.cellValues[+sort].toLowerCase();
+
+      let fa = +a.cellValues[sort];
+      let fb = +b.cellValues[sort];
+      if (sort === 'restaurant') {
+        fa = a.cellValues[sort].toLowerCase().trim()
+        fb = b.cellValues[sort].toLowerCase().trim();
       }
-      if (fa < fb) {
-        return -1;
+      if (sort === "avg_ratings") {
+        if (fa > fb) {
+          return -1;
+        }
+        if (fa < fb) {
+          return 1;
+        }
+        return 0;
+      } else {
+        if (fa < fb) {
+          return -1;
+        }
+        if (fa > fb) {
+          return 1;
+        }
+        return 0;
       }
-      if (fa > fb) {
-        return 1;
-      }
-      return 0;
+
     });
 
   }
   const fetchData = async (page: number) => {
-    let data = records.data
-    if (search) {
-      data = filterData()
 
+    let data = records.data
+    console.log(data[0]);
+
+    if (sort && search) {
+
+      data = await sortArray()
+      console.log(data[0]);
+
+      data = await filterData()
+      console.log(data[0]);
     }
     if (sort) {
-      data = sortArray()
+      data = await sortArray()
+      console.log(data[0]);
     }
-    console.log("in");
-    
+    if (search) {
+      data = await filterData()
+      console.log(data[0]);
+    }
 
     setLoading(true);
 
