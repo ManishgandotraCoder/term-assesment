@@ -1,7 +1,9 @@
 import GridLayout from "components/GridLayout";
 import data from "../../products.json"
+
+import './style.css'
 const RestaurantComponentContainer = ({ search, count, sort, passFields , getCount, counter}: {counter: number, getCount: Function,search: string, count: number, sort: string,  passFields: Function }) => {
-    return (<><div style={{ background: "#F5F5F5" }}>
+    return (<div className="bg-grid">
 
         <form className="flex items-center label" >
             <span className="heading-label" >
@@ -56,6 +58,6 @@ const RestaurantComponentContainer = ({ search, count, sort, passFields , getCou
 
             <GridLayout records={data} count={count} sort={sort} sendCount={getCount} search={search} />
         </div>
-    </div></>)
+    </div>)
 }
 export default RestaurantComponentContainer;

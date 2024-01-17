@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import './style.css'
 import RestaurantComponentContainer from "./container";
 const RestaurantComponent = () => {
     const [counter, setCounter] = useState(0)
