@@ -57,7 +57,7 @@ const RestaurantComponentContainer = ({ search, count, sort, passFields , getCou
                 </div>
             </div>
 
-            <GridLayout records={data} count={count} sort={sort} sendCount={getCount} search={search} />
+            <GridLayout records={data} count={count} sort={sort} sendCount={getCount} search={search} counter={counter}/>
         </div>
     </div>)
 }

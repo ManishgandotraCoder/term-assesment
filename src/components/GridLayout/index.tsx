@@ -6,7 +6,8 @@ interface GridLayoutType {
   sort: string,
   sendCount: Function,
   search: string,
-  records: any
+  records: any,
+  counter: number
 }
 interface listType {
   id: string,
@@ -23,10 +24,12 @@ interface listType {
   }
 }
 const GridLayout = ({ records, count, sort, sendCount, search }: GridLayoutType) => {
-
+  
   const [page, setPage] = React.useState(1);
   const [loading, setLoading] = React.useState(false);
   const [items, setItems] = React.useState([]);
+  const [totalFiltered, setTotalfiltered]= React.useState(records.data.length)
+
 
   React.useEffect(() => {
     window.addEventListener('scroll', handleScroll);
@@ -51,6 +54,10 @@ const GridLayout = ({ records, count, sort, sendCount, search }: GridLayoutType)
     fetchData(1)
   }, [count, sort, search])
 
+  useEffect(()=>{
+    console.log(totalFiltered);
+
+  },[totalFiltered])
   const sortArray = () => {
 
     return records.data.sort((a: any, b: any) => {
@@ -92,11 +99,9 @@ const GridLayout = ({ records, count, sort, sendCount, search }: GridLayoutType)
       }
       if (search) {
         data = await filterData()
+        setTotalfiltered(data.length)
       }
     }
-
-
-
     if (page === 1) {
       let __newRecord = data.slice(0, count)
       setItems(__newRecord);
@@ -111,12 +116,14 @@ const GridLayout = ({ records, count, sort, sendCount, search }: GridLayoutType)
       setLoading(false);
     }, 5000)
   };
-
+  
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.offsetHeight
+      document.documentElement.offsetHeight  && 
+      totalFiltered>= count
     ) {
+      
       setPage((prevPage) => prevPage + 1);
     }
   };
@@ -136,7 +143,7 @@ const GridLayout = ({ records, count, sort, sendCount, search }: GridLayoutType)
           </div>
         ))}
       </div>
-      {loading &&
+      {loading && totalFiltered>= count &&
         <LoaderComponent page={page} count={count} />
       }
     </>
