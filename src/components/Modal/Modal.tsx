@@ -69,14 +69,11 @@ export default function Modal({ show, showModalCallback, data }: ModalType) {
                                     </p>
                                 </div>
                                 {/*footer*/}
-                                <div className="flex items-center justify-end pl-5 pt-2 pb-2  border-t border-solid border-blueGray-200 rounded-b">
-                                    <button
-                                        className="background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                        type="button"
-                                        onClick={() => showModalCallback(false)}
-                                    >
-                                        Close
-                                    </button>
+                                <div className="flex items-center justify-end p-2  border-t border-solid border-blueGray-200 rounded-b">
+
+
+                                    <button type="button" onClick={() => showModalCallback(false)} 
+                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Close</button>
 
                                 </div>
                             </div>
