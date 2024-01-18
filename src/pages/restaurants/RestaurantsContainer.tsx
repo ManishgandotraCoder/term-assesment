@@ -33,7 +33,7 @@ const RestaurantComponentContainer = ({ search, count, sort, passFields, getCoun
                 <div>
                     <select data-testid="count-input" value={count} onChange={(e) => passFields('count', +e.target.value)}
                         id="count" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option >No. of records</option>
+                        <option value ="">No. of records</option>
                         <option value={50}>50</option>
                         <option value={100}>100</option>
                         <option value={250}>250</option>
@@ -51,7 +51,7 @@ const RestaurantComponentContainer = ({ search, count, sort, passFields, getCoun
                         id="sort"
                         data-testid="sort-input"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option >Sort</option>
+                        <option value ="">Sort</option>
                         <option value="restaurant">Name</option>
                         <option value="price">Price</option>
                         <option value="delivery_time">Delivery time</option>
