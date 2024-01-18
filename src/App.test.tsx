@@ -4,10 +4,8 @@ import '@testing-library/jest-dom';
 import App from './App';
 
 describe('App', () => {
-  it('renders the App component', () => {
+  it('TC1. renders the Restraunt component', () => {
     render(<App />);
-
-    // Check if RestaurantComponent is rendered
     expect(screen.getByTestId('restaurant-component')).toBeInTheDocument();
   });
 });

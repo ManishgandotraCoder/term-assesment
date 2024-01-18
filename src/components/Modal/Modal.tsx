@@ -15,7 +15,7 @@ interface ModalType {
     show: boolean,
     showModalCallback: Function
 }
-export default function Modal({ show, showModalCallback, data }: ModalType) {
+export default function ModalComponent({ show, showModalCallback, data }: ModalType) {
 
     return (
         <>

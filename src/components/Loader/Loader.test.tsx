@@ -3,8 +3,8 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import LoaderComponent from './Loader';
 
-describe('LoaderComponent', () => {
-    it('renders the loader with correct loading message', () => {
+describe('Loader Component', () => {
+    it('TC1. Renders the loader with correct loading message', () => {
         const mockLoaderProps = {
             page: 2,
             count: 10,

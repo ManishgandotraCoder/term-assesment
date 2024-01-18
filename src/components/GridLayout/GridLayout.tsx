@@ -21,13 +21,12 @@ interface listType {
     address: string,
     area: string,
     city: string,
-
   }
 }
 /*
   Grid Layout
 */
-const GridLayout = ({ records, count, sort, sendCount, search, counter }: GridLayoutType) => {
+const GridLayoutComponent = ({ records, count, sort, sendCount, search, counter }: GridLayoutType) => {
 
   const [page, setPage] = React.useState(1);
   const [loading, setLoading] = React.useState(false);
@@ -171,4 +170,4 @@ const GridLayout = ({ records, count, sort, sendCount, search, counter }: GridLa
   );
 };
 
-export default GridLayout;
+export default GridLayoutComponent;

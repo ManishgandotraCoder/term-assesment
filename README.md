@@ -39,11 +39,13 @@
 
 ## Tasks Completed 
 
-1. Responsive Grid Layout 
-    
+1. Responsive Grid Layout   
 2. Filters 
 3. Sorting 
 4. Infinite Loader
 5. No. of Records
 6. Tab listener
 
+Libraries Used 
+1. React typescript
+2. Tailwind CSS 

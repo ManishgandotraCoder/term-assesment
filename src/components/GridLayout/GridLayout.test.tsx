@@ -48,12 +48,12 @@ jest.mock('components/Loader/Loader', () => ({
     default: jest.fn(() => <div data-testid="mocked-loader" />),
 }));
 
-describe('GridLayout Component', () => {
+describe('Grid Layout Component', () => {
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
-    it('renders without crashing', () => {
+    it('1. TC1 renders without crashing', () => {
         render(
             <GridLayout
                 records={mockRecords}
@@ -68,7 +68,7 @@ describe('GridLayout Component', () => {
         expect(screen.getByTestId('mocked-item-component')).toBeInTheDocument();
     });
 
-    it('renders ItemComponent for each item', () => {
+    it('2. TC2 renders ItemComponent for each item', () => {
         render(
             <GridLayout
                 records={mockRecords}
@@ -84,7 +84,7 @@ describe('GridLayout Component', () => {
         expect(mockedItemComponents).toHaveLength(1);
     });
 
-    it('renders LoaderComponent when loading', () => {
+    it('3. TC3 renders LoaderComponent when loading', () => {
         render(
             <GridLayout
                 records={mockRecords}
@@ -99,7 +99,7 @@ describe('GridLayout Component', () => {
         expect(screen.getByTestId('mocked-item-component')).toBeInTheDocument();
     });
 
-    it('triggers fetchData on page scroll', async () => {
+    it('4. TC4 triggers fetchData on page scroll', async () => {
         render(
             <GridLayout
                 records={mockRecords}
@@ -122,13 +122,13 @@ describe('GridLayout Component', () => {
         // Add more assertions as needed
     });
 
-    it('should filter data based on search term', () => {
+    it('5. TC5 should filter data based on search term', () => {
         const search = 'ARestaurant';
         const filteredData = filterData(mockRecords, search);
         expect(filteredData.length).toEqual(1);
     });
 
-    it('should sort data based on the provided sorting parameter', () => {
+    it('6. TC6 should sort data based on the provided sorting parameter', () => {
         const sort = 'avg_ratings';
         const sortedData = sortArray(mockRecords, sort);
 
@@ -136,7 +136,7 @@ describe('GridLayout Component', () => {
         expect(mockRecords.data.length).toEqual(sortedData.length);
     });
 
-    it('should fetch data and update state', async () => {
+    it('7. TC7 should fetch data and update state', async () => {
         const { getByTestId } = render(
             <GridLayout
                 records={mockRecords}

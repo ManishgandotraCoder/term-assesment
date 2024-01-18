@@ -16,7 +16,7 @@ const mockData = {
 };
 
 describe('Modal', () => {
-  it('renders the modal when show is true', () => {
+  it('TC1. Renders the modal when show is true', () => {
     const mockModalProps = {
       show: true,
       showModalCallback: jest.fn(),
@@ -43,7 +43,7 @@ describe('Modal', () => {
     expect(screen.getByText('Close')).toBeInTheDocument();
   });
 
-  it('calls showModalCallback with false when Close button is clicked', () => {
+  it('TC2. Calls showModalCallback with false when Close button is clicked', () => {
     const mockModalProps = {
       show: true,
       showModalCallback: jest.fn(),
@@ -59,7 +59,7 @@ describe('Modal', () => {
     expect(mockModalProps.showModalCallback).toHaveBeenCalledWith(false);
   });
 
-  it('does not render the modal when show is false', () => {
+  it('TC3. does not render the modal when show is false', () => {
     const mockModalProps = {
       show: false,
       showModalCallback: jest.fn(),

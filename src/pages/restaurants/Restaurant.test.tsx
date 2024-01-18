@@ -1,69 +1,137 @@
-import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
-import RestaurantComponent from './RestaurantsHelper'; // Adjust the path accordingly
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import RestaurantComponentContainer from './RestaurantsContainer';
+import RestaurantComponent from './RestaurantsHelper';
+// Mocking the callback functions
+const passFieldsMock = jest.fn();
+const getCountMock = jest.fn();
 
+describe('RestaurantComponentContainer', () => {
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+    it('renders the component with initial state', () => {
+        render(<RestaurantComponent />);
 
-jest.mock('components/GridItem/GridItem', () => ({
-    __esModule: true,
-    default: jest.fn(() => <div data-testid="mocked-item-component" />),
-}));
+        // Assuming the initial state values are reflected in your RestaurantComponentContainer
+        expect(screen.getByTestId('restaurant-component')).toBeInTheDocument();
+        expect(screen.getByTestId('search-input')).toHaveValue('');
+        expect(screen.getByTestId('count-input')).toHaveValue("50");
+        expect(screen.getByTestId('sort-input')).toHaveValue('');
+    });
+    it('renders the component with initial props', () => {
+        render(
+            <RestaurantComponentContainer
+                search=""
+                count={50}
+                sort="restaurant"
+                passFields={passFieldsMock}
+                getCount={getCountMock}
+                counter={10}
+            />
+        );
 
+        expect(screen.getByTestId('restaurant-component')).toBeInTheDocument();
+        expect(screen.getByTestId('search-input')).toHaveValue('');
+        expect(screen.getByTestId('count-input')).toHaveValue('50');
+        expect(screen.getByTestId('sort-input')).toHaveValue('restaurant');
+        expect(screen.getByText(/Showing 1 to 10 records/)).toBeInTheDocument();
+    });
 
-describe('RestaurantComponent', () => {
-  it('should update state when changing filters', () => {
-    const { getByTestId } = render(<RestaurantComponent />);
-    
-    // Assuming there are input fields for count, sort, and search
-    const countInput = getByTestId('count-input');
-    const sortInput = getByTestId('sort-input');
-    const searchInput = getByTestId('search-input');
+    it('updates search input value and triggers passFields callback', async () => {
+        render(
+            <RestaurantComponentContainer
+                search=""
+                count={50}
+                sort="restaurant"
+                passFields={passFieldsMock}
+                getCount={getCountMock}
+                counter={10}
+            />
+        );
 
-    fireEvent.change(countInput, { target: { value: '10' } });
-    fireEvent.change(sortInput, { target: { value: 'rating' } });
-    fireEvent.change(searchInput, { target: { value: 'example' } });
+        const searchInput = screen.getByTestId('search-input');
+        fireEvent.change(searchInput, { target: { value: 'pizza' } });
 
-    let data = getByTestId('mocked-item-component')
-    console.log(data);
-    
-    // Add assertions to check if state is updated accordingly
-    // You can use getByTestId and check the value attribute of the inputs or any other relevant state update
-  });
+        await waitFor(() => {
+            expect(searchInput).toHaveValue('pizza');
+            expect(passFieldsMock).toHaveBeenCalledWith('search', 'pizza');
+        });
+    });
 
-//   it('should trigger getCount callback when getCount is called', () => {
-//     const { getByTestId } = render(<RestaurantComponent />);
-    
-//     const count = 5;
+    it('updates count input value and triggers passFields and getCount callbacks', async () => {
+        render(
+            <RestaurantComponentContainer
+                search=""
+                count={50}
+                sort="restaurant"
+                passFields={passFieldsMock}
+                getCount={getCountMock}
+                counter={10}
+            />
+        );
 
-//     // Assuming there is a button or event that triggers getCount
-//     const getCountButton = getByTestId('get-count-button');
-//     fireEvent.click(getCountButton);
+        const countInput = screen.getByTestId('count-input');
+        fireEvent.change(countInput, { target: { value: 100 } });
 
-//     // Add assertions to check if getCount callback is triggered with the correct count value
-//   });
+        await waitFor(() => {
+            expect(countInput).toHaveValue(100);
+            expect(passFieldsMock).toHaveBeenCalledWith('count', '100');
+            expect(getCountMock).toHaveBeenCalledWith(100);
+        });
+    });
 
-//   it('should pass updated fields to passFields callback', async () => {
-//     const { getByTestId } = render(<RestaurantComponent />);
-    
-//     // Assuming there are input fields for count, sort, and search
-//     const countInput = getByTestId('count-input');
-//     const sortInput = getByTestId('sort-input');
-//     const searchInput = getByTestId('search-input');
+    it('updates sort input value and triggers passFields callback', async () => {
+        render(
+            <RestaurantComponentContainer
+                search=""
+                count={50}
+                sort="restaurant"
+                passFields={passFieldsMock}
+                getCount={getCountMock}
+                counter={10}
+            />
+        );
 
-//     fireEvent.change(countInput, { target: { value: '15' } });
-//     fireEvent.change(sortInput, { target: { value: 'price' } });
-//     fireEvent.change(searchInput, { target: { value: 'pizza' } });
+        const sortInput = screen.getByTestId('sort-input');
+        fireEvent.change(sortInput, { target: { value: 'price' } });
 
-//     // Assuming there is a button or event that triggers passFields
-//     const passFieldsButton = getByTestId('search-input');
-//     fireEvent.change(passFieldsButton);
+        await waitFor(() => {
+            expect(sortInput).toHaveValue('price');
+            expect(passFieldsMock).toHaveBeenCalledWith('sort', 'price');
+        });
+    });
+   
 
-//     // Wait for the asynchronous state update
-//     await waitFor(() => {
-//         expect(passFieldsButton).toHaveBeenCalledWith({
-//             count: '15',
-//             sort: 'price',
-//             search: 'pizza',
-//           });
-//     });
-//   });
+    it('updates search input value and triggers passFields callback', async () => {
+        render(<RestaurantComponent />);
+
+        const searchInput = screen.getByTestId('search-input');
+        fireEvent.change(searchInput, { target: { value: 'pizza' } });
+
+        await waitFor(() => {
+            expect(searchInput).toHaveValue('pizza');
+        });
+    });
+
+    it('updates count input value and triggers passFields and getCount callbacks', async () => {
+        render(<RestaurantComponent />);
+
+        const countInput = screen.getByTestId('count-input');
+        fireEvent.change(countInput, { target: { value: "100" } });
+
+        await waitFor(() => {
+            expect(countInput).toHaveValue("100");
+        });
+    });
+
+    it('updates sort input value and triggers passFields callback', async () => {
+        render(<RestaurantComponent />);
+
+        const sortInput = screen.getByTestId('sort-input');
+        fireEvent.change(sortInput, { target: { value: 'price' } });
+
+        await waitFor(() => {
+            expect(sortInput).toHaveValue('price');
+        });
+    });
 });
