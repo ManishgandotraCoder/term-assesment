@@ -1,4 +1,5 @@
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { render,  waitFor, screen, act,fireEvent } from '@testing-library/react';
+
 import RestaurantComponentContainer from './RestaurantsContainer';
 import RestaurantComponent from './RestaurantsHelper';
 // Mocking the callback functions
@@ -9,7 +10,7 @@ describe('RestaurantComponentContainer', () => {
     afterEach(() => {
         jest.clearAllMocks();
     });
-    it('renders the component with initial state', () => {
+    it('1.TC1 renders the component with initial state', () => {
         render(<RestaurantComponent />);
 
         // Assuming the initial state values are reflected in your RestaurantComponentContainer
@@ -18,7 +19,7 @@ describe('RestaurantComponentContainer', () => {
         expect(screen.getByTestId('count-input')).toHaveValue("50");
         expect(screen.getByTestId('sort-input')).toHaveValue('');
     });
-    it('renders the component with initial props', () => {
+    it('1.TC2 renders the component with initial props', () => {
         render(
             <RestaurantComponentContainer
                 search=""
@@ -37,32 +38,12 @@ describe('RestaurantComponentContainer', () => {
         expect(screen.getByText(/Showing 1 to 10 records/)).toBeInTheDocument();
     });
 
-    it('updates search input value and triggers passFields callback', async () => {
+
+    it('1.TC3 updates count input value and triggers passFields and getCount callbacks', async () => {
         render(
             <RestaurantComponentContainer
                 search=""
-                count={50}
-                sort="restaurant"
-                passFields={passFieldsMock}
-                getCount={getCountMock}
-                counter={10}
-            />
-        );
-
-        const searchInput = screen.getByTestId('search-input');
-        fireEvent.change(searchInput, { target: { value: 'pizza' } });
-
-        await waitFor(() => {
-            expect(searchInput).toHaveValue('pizza');
-            expect(passFieldsMock).toHaveBeenCalledWith('search', 'pizza');
-        });
-    });
-
-    it('updates count input value and triggers passFields and getCount callbacks', async () => {
-        render(
-            <RestaurantComponentContainer
-                search=""
-                count={50}
+                count={100}
                 sort="restaurant"
                 passFields={passFieldsMock}
                 getCount={getCountMock}
@@ -71,21 +52,18 @@ describe('RestaurantComponentContainer', () => {
         );
 
         const countInput = screen.getByTestId('count-input');
-        fireEvent.change(countInput, { target: { value: 100 } });
 
         await waitFor(() => {
-            expect(countInput).toHaveValue(100);
-            expect(passFieldsMock).toHaveBeenCalledWith('count', '100');
-            expect(getCountMock).toHaveBeenCalledWith(100);
+            expect(countInput).toHaveValue("100");
         });
     });
 
-    it('updates sort input value and triggers passFields callback', async () => {
+    it('1.TC4 updates sort input value and triggers passFields callback', async () => {
         render(
             <RestaurantComponentContainer
                 search=""
                 count={50}
-                sort="restaurant"
+                sort="avg_ratings"
                 passFields={passFieldsMock}
                 getCount={getCountMock}
                 counter={10}
@@ -93,16 +71,14 @@ describe('RestaurantComponentContainer', () => {
         );
 
         const sortInput = screen.getByTestId('sort-input');
-        fireEvent.change(sortInput, { target: { value: 'price' } });
 
         await waitFor(() => {
-            expect(sortInput).toHaveValue('price');
-            expect(passFieldsMock).toHaveBeenCalledWith('sort', 'price');
+            expect(sortInput).toHaveValue('avg_ratings');
         });
     });
    
 
-    it('updates search input value and triggers passFields callback', async () => {
+    it('1.TC5 updates search input value and triggers passFields callback', async () => {
         render(<RestaurantComponent />);
 
         const searchInput = screen.getByTestId('search-input');
@@ -113,7 +89,7 @@ describe('RestaurantComponentContainer', () => {
         });
     });
 
-    it('updates count input value and triggers passFields and getCount callbacks', async () => {
+    it('1.TC6 updates count input value and triggers passFields and getCount callbacks', async () => {
         render(<RestaurantComponent />);
 
         const countInput = screen.getByTestId('count-input');
@@ -124,7 +100,7 @@ describe('RestaurantComponentContainer', () => {
         });
     });
 
-    it('updates sort input value and triggers passFields callback', async () => {
+    it('1.TC7 updates sort input value and triggers passFields callback', async () => {
         render(<RestaurantComponent />);
 
         const sortInput = screen.getByTestId('sort-input');

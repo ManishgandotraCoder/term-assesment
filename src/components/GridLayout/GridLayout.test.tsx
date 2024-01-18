@@ -38,6 +38,28 @@ const mockRecords = {
 
 const mockSendCount = jest.fn();
 
+// Helper functions for testing
+const filterData=(records: any, search: any)=> {
+    return records.data.filter((item: any) =>
+        item.cellValues.restaurant.toLowerCase().includes(search.toLowerCase())
+    );
+}
+
+const sortArray=(records: any, sort: any)=> {
+    return records.data.sort((a: any, b: any) => {
+        let fa = +a.cellValues[sort];
+        let fb = +b.cellValues[sort];
+        if (sort === 'restaurant') {
+            fa = a.cellValues[sort].toLowerCase().trim();
+            fb = b.cellValues[sort].toLowerCase().trim();
+        }
+        if (sort === 'avg_ratings') {
+            return fa > fb ? -1 : fa < fb ? 1 : 0;
+        } else {
+            return fa < fb ? -1 : fa > fb ? 1 : 0;
+        }
+    });
+}
 jest.mock('components/GridItem/GridItem', () => ({
     __esModule: true,
     default: jest.fn(() => <div data-testid="mocked-item-component" />),
@@ -50,7 +72,9 @@ jest.mock('components/Loader/Loader', () => ({
 
 describe('Grid Layout Component', () => {
     beforeEach(() => {
-        jest.clearAllMocks();
+        act(()=>{
+            jest.clearAllMocks();
+        })
     });
 
     it('1. TC1 renders without crashing', () => {
@@ -119,7 +143,6 @@ describe('Grid Layout Component', () => {
         await waitFor(() => {
             expect(mockSendCount).toHaveBeenCalledTimes(2);
         });
-        // Add more assertions as needed
     });
 
     it('5. TC5 should filter data based on search term', () => {
@@ -153,30 +176,7 @@ describe('Grid Layout Component', () => {
         // Wait for the asynchronous fetchData operation to complete
         await waitFor(() => {
             expect(mockSendCount).toHaveBeenCalled();
-            // Add more assertions as needed
         });
     });
 });
 
-// Helper functions for testing
-function filterData(records: any, search: any) {
-    return records.data.filter((item: any) =>
-        item.cellValues.restaurant.toLowerCase().includes(search.toLowerCase())
-    );
-}
-
-function sortArray(records: any, sort: any) {
-    return records.data.sort((a: any, b: any) => {
-        let fa = +a.cellValues[sort];
-        let fb = +b.cellValues[sort];
-        if (sort === 'restaurant') {
-            fa = a.cellValues[sort].toLowerCase().trim();
-            fb = b.cellValues[sort].toLowerCase().trim();
-        }
-        if (sort === 'avg_ratings') {
-            return fa > fb ? -1 : fa < fb ? 1 : 0;
-        } else {
-            return fa < fb ? -1 : fa > fb ? 1 : 0;
-        }
-    });
-}
