@@ -3,7 +3,7 @@
 import React from 'react';
 
 import './App.css'
-import RestaurantComponent from 'pages/restaurants';
+import RestaurantComponent from 'pages/restaurants/RestaurantsHelper';
 const App: React.FC = () => {
   return (
     <RestaurantComponent/>

@@ -1,5 +1,5 @@
-import ItemComponent from 'components/Item';
-import LoaderComponent from 'components/Loader';
+import ItemComponent from 'components/GridItem/GridItem';
+import LoaderComponent from 'components/Loader/Loader';
 import React, { useEffect } from 'react';
 interface GridLayoutType {
   count: number,
@@ -20,28 +20,38 @@ interface listType {
     price: string,
     address: string,
     area: string,
-    city: string
+    city: string,
+
   }
 }
-const GridLayout = ({ records, count, sort, sendCount, search }: GridLayoutType) => {
-  
+/*
+  Grid Layout
+*/
+const GridLayout = ({ records, count, sort, sendCount, search, counter }: GridLayoutType) => {
+
   const [page, setPage] = React.useState(1);
   const [loading, setLoading] = React.useState(false);
   const [items, setItems] = React.useState([]);
-  const [totalFiltered, setTotalfiltered]= React.useState(records.data.length)
+  const [totalFiltered, setTotalfiltered] = React.useState(records.data.length)
 
-
+  /*
+    Event for scrolling down to load more data.
+  */
   React.useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
+  /*
+    On page update load more data 
+  */
   React.useEffect(() => {
     fetchData(page);
   }, [page]);
-
+  /*
+    Search data from array by name
+  */
   function filterData() {
     return records
       .data
@@ -49,15 +59,17 @@ const GridLayout = ({ records, count, sort, sendCount, search }: GridLayoutType)
         (item.cellValues.restaurant.toLowerCase().includes(search.toLowerCase()))
       )
   }
+  /*
+  On Count , sort , search change loading data 
+  */
   useEffect(() => {
     setPage(1)
     fetchData(1)
   }, [count, sort, search])
 
-  useEffect(()=>{
-    console.log(totalFiltered);
+  useEffect(() => {
 
-  },[totalFiltered])
+  }, [totalFiltered])
   const sortArray = () => {
 
     return records.data.sort((a: any, b: any) => {
@@ -87,6 +99,9 @@ const GridLayout = ({ records, count, sort, sendCount, search }: GridLayoutType)
       }
     });
   }
+  /*
+  Update data by search , sort for view
+*/
   const fetchData = async (page: number) => {
     setLoading(true);
     let data: any = records.data
@@ -109,43 +124,49 @@ const GridLayout = ({ records, count, sort, sendCount, search }: GridLayoutType)
     }
     else {
       let ___newRecord = data.slice(((page ? page - 1 : page) * count), (page * count))
-      setItems((prevItems):any => [...prevItems, ...___newRecord]);
+      setItems((prevItems): any => [...prevItems, ...___newRecord]);
       sendCount(___newRecord.length + items.length)
     }
     setTimeout(() => {
       setLoading(false);
     }, 5000)
   };
-  
+  /*
+    Page change on the basis of scrol
+  */
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.offsetHeight  && 
-      totalFiltered>= count
+      document.documentElement.offsetHeight &&
+      totalFiltered >= count
     ) {
-      
+
       setPage((prevPage) => prevPage + 1);
     }
   };
 
   return (
     <>
-      <div style={{ marginTop: "20px" }} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4" >
+      <div style={{ marginTop: "20px" }} data-testid="mocked-item-component" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4" >
         {items.map((record: listType, index) => (
           <div
             key={index}
             className="grid-item"
             aria-rowindex={index}
             tabIndex={index + 2}
+
           >
             <ItemComponent data={record.cellValues} />
 
           </div>
         ))}
       </div>
-      {loading && totalFiltered>= count &&
-        <LoaderComponent page={page} count={count} />
-      }
+      <div >
+        {loading && totalFiltered >= count &&
+          <LoaderComponent page={page} count={count} />
+        }
+      </div>
+
     </>
   );
 };

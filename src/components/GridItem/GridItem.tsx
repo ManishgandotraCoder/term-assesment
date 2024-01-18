@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import './style.css'
-import ModalComponent from 'components/Modal';
+import './GridItem.css'
+import ModalComponent from 'components/Modal/Modal';
 
 interface itemType {
   data: {
@@ -15,6 +15,9 @@ interface itemType {
     city: string
   }
 }
+/*
+  Grid Item Layout
+*/
 const ItemComponent = ({ data }: itemType) => {
   const [modal, setModal] = useState(false)
   function showModalCallback(params: boolean) {
@@ -22,7 +25,8 @@ const ItemComponent = ({ data }: itemType) => {
   }
   return (
     <>
-      <div className="background-grid " onClick={() => setModal(!modal)}>
+      <div className="background-grid " data-testid={'mocked-item-component'}
+        onClick={() => setModal(!modal)}>
 
         <p className='heading'>
           {data.restaurant}
@@ -36,6 +40,7 @@ const ItemComponent = ({ data }: itemType) => {
         </p>
 
       </div>
+      {/* Modal COmponent */}
       <ModalComponent show={modal} data={data} showModalCallback={showModalCallback} />
     </>
   );
