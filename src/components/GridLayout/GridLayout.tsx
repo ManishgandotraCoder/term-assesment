@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import ItemComponent from 'components/GridItem/GridItem';
+import LoaderComponent from 'components/Loader/Loader';
 
 interface GridLayoutType {
   count: number,
@@ -56,16 +57,16 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
       }
     };
   }, []);
-  const sortArray = () => {
-
-    return records.data.sort((a: any, b: any) => {
-
+  const sortArray = useCallback(() => {
+    return [...records.data].sort((a: any, b: any) => {
       let fa = +a.cellValues[sort];
-      let fb = +b.cellValues[sort]
+      let fb = +b.cellValues[sort];
+
       if (sort === 'restaurant') {
-        fa = a.cellValues[sort].toLowerCase().trim()
+        fa = a.cellValues[sort].toLowerCase().trim();
         fb = b.cellValues[sort].toLowerCase().trim();
       }
+
       if (sort === "avg_ratings") {
         if (fa > fb) {
           return -1;
@@ -84,14 +85,14 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
         return 0;
       }
     });
-  }
-  function filterData() {
-    return records
-      .data
-      .filter((item: listType) =>
-        (item.cellValues.restaurant.toLowerCase().includes(search.toLowerCase()))
-      )
-  }
+  }, [records.data, sort]);
+
+  const filterData = useCallback(() => {
+    return records.data.filter((item: listType) =>
+      (item.cellValues.restaurant.toLowerCase().includes(search.toLowerCase()))
+    );
+  }, [records.data, search])
+
   useEffect(() => {
 
     fetchData(pagingNo)
@@ -101,7 +102,7 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
     setPagingNo(1)
     fetchData(1)
   }, [count, sort, search])
-  
+
   const fetchData = useCallback(async (pageNo: number) => {
     setLoading(true);
     let data: any = records.data
@@ -139,27 +140,31 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
     }, 5000)
   }, [records.data, sort, search, count, setItems, sendCount, scrollRef]);
   return (
-    <div
-      ref={scrollRef}
-      data-testid="mocked-item-component"
-      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mt-4"
-      style={{ height: '70vh', overflow: 'auto' }}
-    >
+    <>
+      {isAtTop && loading && pagingNo > 1 && <LoaderComponent page={pagingNo} count={count} />}
+      <div
+        ref={scrollRef}
+        data-testid="mocked-item-component"
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mt-4"
+        style={{ height: '70vh', overflow: 'auto' }}
+      >
 
-      {items.map((record: listType, index) => (
-        <div
-          key={index}
-          className="grid-item"
-          aria-rowindex={index}
-          tabIndex={index + 2}
+        {items.map((record: listType, index) => (
+          <div
+            key={index}
+            className="grid-item"
+            aria-rowindex={index}
+            tabIndex={index + 2}
 
-        >
-          <ItemComponent data={record.cellValues} />
+          >
+            <ItemComponent data={record.cellValues} />
 
-        </div>
-      ))}
+          </div>
+        ))}
 
-    </div>
+      </div>
+      {isAtBottom && loading && <LoaderComponent page={pagingNo} count={count} />}
+    </>
   );
 };
 

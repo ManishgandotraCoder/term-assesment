@@ -35,10 +35,7 @@ const ItemComponent = ({ data }: itemType) => {
         <span className='rating-count'>{data.total_ratings} reviews</span>
         <p className='cuisine'>{data.food_type.split(',').slice(0, 2).map((item: string) => item + ' · ')} <span className="viewmore">View more</span></p>
         <p className='cuisine'>₹ {data.price} for one ( Deliver in {data.delivery_time} min )</p>
-        <p className='address'>
-          Address : {data.address} , {data.area} , {data.city}
-        </p>
-
+       
       </div>
       {/* Modal COmponent */}
       <ModalComponent show={modal} data={data} showModalCallback={showModalCallback} />
