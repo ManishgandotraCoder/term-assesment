@@ -30,7 +30,6 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
   const [isAtBottom, setIsAtBottom] = useState<boolean>(false);
   const [items, setItems] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-  // const [page, setPage] = React.useState(1);
   const [pagingNo, setPagingNo] = useState(1)
 
   const handleScroll = () => {
@@ -59,33 +58,16 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
   }, []);
   const sortArray = useCallback(() => {
     return [...records.data].sort((a: any, b: any) => {
-      let fa = +a.cellValues[sort];
-      let fb = +b.cellValues[sort];
+        const fa = sort === 'restaurant' ? a.cellValues[sort].toLowerCase().trim() : +a.cellValues[sort];
+        const fb = sort === 'restaurant' ? b.cellValues[sort].toLowerCase().trim() : +b.cellValues[sort];
 
-      if (sort === 'restaurant') {
-        fa = a.cellValues[sort].toLowerCase().trim();
-        fb = b.cellValues[sort].toLowerCase().trim();
-      }
-
-      if (sort === "avg_ratings") {
-        if (fa > fb) {
-          return -1;
+        if (sort === "avg_ratings") {
+            return fb - fa;
+        } else {
+            return fa < fb ? -1 : fa > fb ? 1 : 0;
         }
-        if (fa < fb) {
-          return 1;
-        }
-        return 0;
-      } else {
-        if (fa < fb) {
-          return -1;
-        }
-        if (fa > fb) {
-          return 1;
-        }
-        return 0;
-      }
     });
-  }, [records.data, sort]);
+}, [records.data, sort]);
 
   const filterData = useCallback(() => {
     return records.data.filter((item: listType) =>
@@ -141,7 +123,7 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
   }, [records.data, sort, search, count, setItems, sendCount, scrollRef]);
   return (
     <>
-      {isAtTop && loading && pagingNo > 1 && <LoaderComponent page={pagingNo} count={count} />}
+      {isAtTop && loading && pagingNo > 1 && <LoaderComponent />}
       <div
         ref={scrollRef}
         data-testid="mocked-item-component"
@@ -163,7 +145,7 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
         ))}
 
       </div>
-      {isAtBottom && loading && <LoaderComponent page={pagingNo} count={count} />}
+      {isAtBottom && loading && <LoaderComponent />}
     </>
   );
 };

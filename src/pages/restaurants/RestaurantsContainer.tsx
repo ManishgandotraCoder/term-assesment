@@ -1,12 +1,11 @@
 import GridLayout from "components/GridLayout/GridLayout";
 import data from "../../products.json"
 
-import './Restaurants.css'
 const RestaurantComponentContainer = ({ search, count, sort, passFields, getCount, records_string }: { records_string: string, getCount: Function, search: string, count: number, sort: string, passFields: Function }) => {
-    return (<div data-testid="restaurant-component" className="bg-grid">
+    return (<div data-testid="restaurant-component" className ="bg-gray-200">
 
-        <form className="flex items-center label" >
-            <span className="heading-label" >
+        <form className="flex items-center bg-white p-4 fixed top-0 w-full" >
+            <span className="mr-5 ml-5 text-lg font-semibold" >
                 Restaurants
             </span>
             <div className="relative w-full" >
@@ -27,7 +26,7 @@ const RestaurantComponentContainer = ({ search, count, sort, passFields, getCoun
         </form>
 
 
-        <div className="container mx-auto p-4 " >
+        <div className="container mx-auto p-4 mt-5 " >
 
             <div className="grid grid-cols-3 gap-4 mt-14">
                 
@@ -49,7 +48,7 @@ const RestaurantComponentContainer = ({ search, count, sort, passFields, getCoun
                     </select>
 
                 </div>
-                <div className="showing"> {records_string}
+                <div className="bg-white p-2 rounded-lg"> {records_string}
 
                 </div>
             </div>
