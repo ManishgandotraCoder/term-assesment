@@ -2,7 +2,7 @@ import GridLayout from "components/GridLayout/GridLayout";
 import data from "../../products.json"
 
 import './Restaurants.css'
-const RestaurantComponentContainer = ({ search, count, sort, passFields, getCount, counter }: { counter: number, getCount: Function, search: string, count: number, sort: string, passFields: Function }) => {
+const RestaurantComponentContainer = ({ search, count, sort, passFields, getCount, records_string }: { records_string: string, getCount: Function, search: string, count: number, sort: string, passFields: Function }) => {
     return (<div data-testid="restaurant-component" className="bg-grid">
 
         <form className="flex items-center label" >
@@ -30,17 +30,7 @@ const RestaurantComponentContainer = ({ search, count, sort, passFields, getCoun
         <div className="container mx-auto p-4 " >
 
             <div className="grid grid-cols-3 gap-4 mt-14">
-                <div>
-                    <select data-testid="count-input" value={count} onChange={(e) => passFields('count', +e.target.value)}
-                        id="count" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option value ="">No. of records</option>
-                        <option value={50}>50</option>
-                        <option value={100}>100</option>
-                        <option value={250}>250</option>
-
-                    </select>
-
-                </div>
+                
                 <div>
                     <select
                         value={sort}
@@ -59,12 +49,12 @@ const RestaurantComponentContainer = ({ search, count, sort, passFields, getCoun
                     </select>
 
                 </div>
-                <div className="showing">Showing 1 to {counter} records
+                <div className="showing"> {records_string}
 
                 </div>
             </div>
 
-            <GridLayout records={data} count={count} sort={sort} sendCount={getCount} search={search} counter={counter} />
+            <GridLayout records={data} count={count} sort={sort} sendCount={getCount} search={search} records_string={records_string} />
         </div>
     </div>)
 }

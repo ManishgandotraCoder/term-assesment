@@ -85,7 +85,7 @@ describe('Grid Layout Component', () => {
                 sort="avg_ratings"
                 sendCount={mockSendCount}
                 search=""
-                counter={0}
+                records_string={'Showing 1 to 50 records'}
             />
         );
 
@@ -100,7 +100,7 @@ describe('Grid Layout Component', () => {
                 sort="avg_ratings"
                 sendCount={mockSendCount}
                 search=""
-                counter={0}
+                records_string={'Showing 1 to 50 records'}
             />
         );
         const mockedItemComponents = screen.getAllByTestId('mocked-item-component');
@@ -116,7 +116,7 @@ describe('Grid Layout Component', () => {
                 sort="avg_ratings"
                 sendCount={mockSendCount}
                 search=""
-                counter={0}
+                records_string={'Showing 1 to 50 records'}
             />
         );
 
@@ -131,7 +131,7 @@ describe('Grid Layout Component', () => {
                 sort="avg_ratings"
                 sendCount={mockSendCount}
                 search=""
-                counter={0}
+                records_string={'Showing 1 to 50 records'}
             />
         );
 
@@ -167,7 +167,7 @@ describe('Grid Layout Component', () => {
                 sort="avg_ratings"
                 sendCount={mockSendCount}
                 search=""
-                counter={0}
+                records_string={'Showing 1 to 50 records'}
             />
         );
 

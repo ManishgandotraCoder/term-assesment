@@ -1,13 +1,13 @@
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import ItemComponent from 'components/GridItem/GridItem';
-import LoaderComponent from 'components/Loader/Loader';
-import React, { useEffect } from 'react';
+
 interface GridLayoutType {
   count: number,
   sort: string,
   sendCount: Function,
   search: string,
   records: any,
-  counter: number
+  records_string: string
 }
 interface listType {
   id: string,
@@ -23,52 +23,39 @@ interface listType {
     city: string,
   }
 }
-/*
-  Grid Layout
-*/
-const GridLayoutComponent = ({ records, count, sort, sendCount, search, counter }: GridLayoutType) => {
-
-  const [page, setPage] = React.useState(1);
-  const [loading, setLoading] = React.useState(false);
+const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_string }: GridLayoutType) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isAtTop, setIsAtTop] = useState<boolean>(true);
+  const [isAtBottom, setIsAtBottom] = useState<boolean>(false);
   const [items, setItems] = React.useState([]);
-  const [totalFiltered, setTotalfiltered] = React.useState(records.data.length)
+  const [loading, setLoading] = React.useState(false);
+  // const [page, setPage] = React.useState(1);
+  const [pagingNo, setPagingNo] = useState(1)
 
-  /*
-    Event for scrolling down to load more data.
-  */
-  React.useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      // Check if scroll is at the top
+      setIsAtTop(scrollRef.current.scrollTop === 0);
+
+      setIsAtBottom(scrollRef.current.scrollHeight - scrollRef.current.scrollTop <= scrollRef.current.clientHeight + 1);
+      if (scrollRef.current.scrollTop === 0) {
+        setPagingNo(prevPagingNo => Math.max(1, prevPagingNo - 1));
+      } else if (scrollRef.current.scrollHeight - scrollRef.current.scrollTop <= scrollRef.current.clientHeight + 1) {
+        setPagingNo(prevPagingNo => prevPagingNo + 1);
+      }
+    }
+  };
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.addEventListener('scroll', handleScroll);
+    }
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      if (scrollRef.current) {
+        scrollRef.current.removeEventListener('scroll', handleScroll);
+      }
     };
   }, []);
-  /*
-    On page update load more data 
-  */
-  React.useEffect(() => {
-    fetchData(page);
-  }, [page]);
-  /*
-    Search data from array by name
-  */
-  function filterData() {
-    return records
-      .data
-      .filter((item: listType) =>
-        (item.cellValues.restaurant.toLowerCase().includes(search.toLowerCase()))
-      )
-  }
-  /*
-  On Count , sort , search change loading data 
-  */
-  useEffect(() => {
-    setPage(1)
-    fetchData(1)
-  }, [count, sort, search])
-
-  useEffect(() => {
-
-  }, [totalFiltered])
   const sortArray = () => {
 
     return records.data.sort((a: any, b: any) => {
@@ -98,10 +85,24 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, counter 
       }
     });
   }
-  /*
-  Update data by search , sort for view
-*/
-  const fetchData = async (page: number) => {
+  function filterData() {
+    return records
+      .data
+      .filter((item: listType) =>
+        (item.cellValues.restaurant.toLowerCase().includes(search.toLowerCase()))
+      )
+  }
+  useEffect(() => {
+
+    fetchData(pagingNo)
+  }, [pagingNo])
+  useEffect(() => {
+
+    setPagingNo(1)
+    fetchData(1)
+  }, [count, sort, search])
+  
+  const fetchData = useCallback(async (pageNo: number) => {
     setLoading(true);
     let data: any = records.data
     if (sort && search) {
@@ -113,60 +114,52 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, counter 
       }
       if (search) {
         data = await filterData()
-        setTotalfiltered(data.length)
       }
     }
-    if (page === 1) {
+
+    if (pageNo === 1) {
       let __newRecord = data.slice(0, count)
       setItems(__newRecord);
-      sendCount(__newRecord.length)
+      sendCount(`Showing 1 to 50 records`)
     }
     else {
-      let ___newRecord = data.slice(((page ? page - 1 : page) * count), (page * count))
-      setItems((prevItems): any => [...prevItems, ...___newRecord]);
-      sendCount(___newRecord.length + items.length)
+      let ___newRecord = data.slice((pageNo - 1) * 50, (pageNo + 1) * 50)
+      setItems(___newRecord);
+      sendCount(`Showing ${(pageNo - 1) * 50} to ${(pageNo + 1) * 50} records`)
+
+      if (scrollRef.current) {
+        const newScrollTop = scrollRef.current.scrollTop + (scrollRef.current.scrollHeight - scrollRef.current.clientHeight) / 2;
+        console.log(newScrollTop);
+
+        scrollRef.current.scrollTo({ top: newScrollTop / 2 });
+      }
     }
     setTimeout(() => {
       setLoading(false);
     }, 5000)
-  };
-  /*
-    Page change on the basis of scrol
-  */
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.offsetHeight &&
-      totalFiltered >= count
-    ) {
-
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
-
+  }, [records.data, sort, search, count, setItems, sendCount, scrollRef]);
   return (
-    <>
-      <div style={{ marginTop: "20px" }} data-testid="mocked-item-component" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4" >
-        {items.map((record: listType, index) => (
-          <div
-            key={index}
-            className="grid-item"
-            aria-rowindex={index}
-            tabIndex={index + 2}
+    <div
+      ref={scrollRef}
+      data-testid="mocked-item-component"
+      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mt-4"
+      style={{ height: '70vh', overflow: 'auto' }}
+    >
 
-          >
-            <ItemComponent data={record.cellValues} />
+      {items.map((record: listType, index) => (
+        <div
+          key={index}
+          className="grid-item"
+          aria-rowindex={index}
+          tabIndex={index + 2}
 
-          </div>
-        ))}
-      </div>
-      <div >
-        {loading && totalFiltered >= count &&
-          <LoaderComponent page={page} count={count} />
-        }
-      </div>
+        >
+          <ItemComponent data={record.cellValues} />
 
-    </>
+        </div>
+      ))}
+
+    </div>
   );
 };
 
