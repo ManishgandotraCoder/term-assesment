@@ -11,7 +11,6 @@ const RestaurantComponent = () => {
   */
   const passFields = (type: string, count: number) => {
     setFields({ ...fields, [type]: count });
-
   }
 
   const getCount = (count: string) => {

@@ -56,8 +56,8 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
       }
     };
   }, []);
-  const sortArray = useCallback(() => {
-    return [...records.data].sort((a: any, b: any) => {
+  const sortArray = useCallback((data: []) => {
+    return [...data].sort((a: any, b: any) => {
       const fa = sort === 'restaurant' ? a.cellValues[sort].toLowerCase().trim() : +a.cellValues[sort];
       const fb = sort === 'restaurant' ? b.cellValues[sort].toLowerCase().trim() : +b.cellValues[sort];
 
@@ -69,8 +69,8 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
     });
   }, [records.data, sort]);
 
-  const filterData = useCallback(() => {
-    return records.data.filter((item: listType) =>
+  const filterData = useCallback((data: listType[]) => {
+    return data.filter((item: listType) =>
       (item.cellValues.restaurant.toLowerCase().includes(search.toLowerCase()))
     );
   }, [records.data, search])
@@ -89,14 +89,14 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
     setLoading(true);
     let data: any = records.data
     if (sort && search) {
-      data = await sortArray()
-      data = await filterData()
+      data = await sortArray(data)
+      data = await filterData(data)
     } else {
       if (sort) {
-        data = await sortArray()
+        data = await sortArray(data)
       }
       if (search) {
-        data = await filterData()
+        data = await filterData(data)
       }
     }
 
@@ -119,7 +119,7 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
     }
     setTimeout(() => {
       setLoading(false);
-    }, 10000)
+    }, 5000)
   }, [records.data, sort, search, count, setItems, sendCount, scrollRef]);
   return (
     <>
@@ -127,8 +127,7 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
       <div
         ref={scrollRef}
         data-testid="mocked-item-component"
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mt-4"
-        style={{ height: '70vh', overflowY: 'auto' }}
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mt-4 h-[76vh] overflow-y-auto overflow-x-auto;"
       >
 
         {items.map((record: listType, index) => (
