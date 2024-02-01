@@ -31,7 +31,7 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
   const [items, setItems] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [pagingNo, setPagingNo] = useState(1)
-
+  const [finalScroller, setFinalScroller] = useState(0)
   const handleScroll = () => {
     if (scrollRef.current) {
       // Check if scroll is at the top
@@ -57,7 +57,7 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
     };
   }, []);
   const sortArray = useCallback((data: []) => {
-    return [...data].sort((a: any, b: any) => {
+    return [...records.data].sort((a: any, b: any) => {
       const fa = sort === 'restaurant' ? a.cellValues[sort].toLowerCase().trim() : +a.cellValues[sort];
       const fb = sort === 'restaurant' ? b.cellValues[sort].toLowerCase().trim() : +b.cellValues[sort];
 
@@ -70,12 +70,13 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
   }, [records.data, sort]);
 
   const filterData = useCallback((data: listType[]) => {
-    return data.filter((item: listType) =>
+    return [...records.data].filter((item: listType) =>
       (item.cellValues.restaurant.toLowerCase().includes(search.toLowerCase()))
     );
   }, [records.data, search])
 
   useEffect(() => {
+    console.log(pagingNo);
 
     fetchData(pagingNo)
   }, [pagingNo])
@@ -86,7 +87,6 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
   }, [count, sort, search])
 
   const fetchData = useCallback(async (pageNo: number) => {
-    setLoading(true);
     let data: any = records.data
     if (sort && search) {
       data = await sortArray(data)
@@ -100,21 +100,26 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
       }
     }
 
-    if (pageNo === 1) {
-      let __newRecord = data.slice(0, count)
-      setItems(__newRecord);
-      sendCount(`Showing 1 to 50 records`)
-    }
-    else {
-      let ___newRecord = data.slice((pageNo - 1) * 50, (pageNo + 1) * 50)
-      setItems(___newRecord);
-      sendCount(`Showing ${(pageNo - 1) * 50} to ${(pageNo + 1) * 50} records`)
+    if ((pageNo * 50 < data.length)) {
+      setLoading(true);
+      if (pageNo === 1) {
+        let __newRecord = data.slice(0, count)
+        setItems(__newRecord);
+        sendCount(`Showing 1 to 50 records`)
+      }
+      else {
+        let ___newRecord = data.slice((pageNo - 1) * 50, (pageNo + 1) * 50)
+        setItems(___newRecord);
+        sendCount(`Showing ${(pageNo - 1) * 50} to ${data.length < ((pageNo + 1) * 50) ? data.length : ((pageNo + 1) * 50)} records`)
 
-      if (scrollRef.current) {
-        const newScrollTop = scrollRef.current.scrollTop + (scrollRef.current.scrollHeight - scrollRef.current.clientHeight) / 2;
-        console.log(newScrollTop);
+        if (scrollRef.current) {
+          if (pageNo === 2 || pageNo === 1) {
+            const newScrollTop = scrollRef.current.scrollTop + (scrollRef.current.scrollHeight - scrollRef.current.clientHeight) / 2;
+            setFinalScroller(newScrollTop)
+          }
 
-        scrollRef.current.scrollTo({ top: newScrollTop / 2 });
+          scrollRef.current.scrollTo({ top: finalScroller });
+        }
       }
     }
     setTimeout(() => {
