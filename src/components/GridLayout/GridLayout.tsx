@@ -58,16 +58,16 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
   }, []);
   const sortArray = useCallback(() => {
     return [...records.data].sort((a: any, b: any) => {
-        const fa = sort === 'restaurant' ? a.cellValues[sort].toLowerCase().trim() : +a.cellValues[sort];
-        const fb = sort === 'restaurant' ? b.cellValues[sort].toLowerCase().trim() : +b.cellValues[sort];
+      const fa = sort === 'restaurant' ? a.cellValues[sort].toLowerCase().trim() : +a.cellValues[sort];
+      const fb = sort === 'restaurant' ? b.cellValues[sort].toLowerCase().trim() : +b.cellValues[sort];
 
-        if (sort === "avg_ratings") {
-            return fb - fa;
-        } else {
-            return fa < fb ? -1 : fa > fb ? 1 : 0;
-        }
+      if (sort === "avg_ratings") {
+        return fb - fa;
+      } else {
+        return fa < fb ? -1 : fa > fb ? 1 : 0;
+      }
     });
-}, [records.data, sort]);
+  }, [records.data, sort]);
 
   const filterData = useCallback(() => {
     return records.data.filter((item: listType) =>
@@ -119,7 +119,7 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
     }
     setTimeout(() => {
       setLoading(false);
-    }, 5000)
+    }, 10000)
   }, [records.data, sort, search, count, setItems, sendCount, scrollRef]);
   return (
     <>
@@ -128,7 +128,7 @@ const GridLayoutComponent = ({ records, count, sort, sendCount, search, records_
         ref={scrollRef}
         data-testid="mocked-item-component"
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mt-4"
-        style={{ height: '70vh', overflow: 'auto' }}
+        style={{ height: '70vh', overflowY: 'auto' }}
       >
 
         {items.map((record: listType, index) => (

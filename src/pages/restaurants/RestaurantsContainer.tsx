@@ -2,7 +2,7 @@ import GridLayout from "components/GridLayout/GridLayout";
 import data from "../../products.json"
 
 const RestaurantComponentContainer = ({ search, count, sort, passFields, getCount, records_string }: { records_string: string, getCount: Function, search: string, count: number, sort: string, passFields: Function }) => {
-    return (<div data-testid="restaurant-component" className ="bg-gray-200">
+    return (<div data-testid="restaurant-component" className ="bg-gray-200 h-[calc(100vh)]">
 
         <form className="flex items-center bg-white p-4 fixed top-0 w-full" >
             <span className="mr-5 ml-5 text-lg font-semibold" >
