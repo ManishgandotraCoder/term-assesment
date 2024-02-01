@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './GridItem.css'
 import ModalComponent from 'components/Modal/Modal';
 
 interface itemType {
@@ -25,19 +24,16 @@ const ItemComponent = ({ data }: itemType) => {
   }
   return (
     <>
-      <div className="background-grid " data-testid={'mocked-item-component'}
+      <div className="rounded-md border border-gray-200 bg-white pb-4 cursor-pointer" data-testid={'mocked-item-component'}
         onClick={() => setModal(!modal)}>
 
-        <p className='heading'>
+        <p className='leading-6 mb-3 text-left text-base text-gray-700 overflow-hidden truncate whitespace-nowrap border border-gray-200 py-2 px-4'>
           {data.restaurant}
         </p>
-        <span className='rating'>{data.avg_ratings} ☆</span>
-        <span className='rating-count'>{data.total_ratings} reviews</span>
-        <p className='cuisine'>{data.food_type.split(',').slice(0, 2).map((item: string) => item + ' · ')} <span className="viewmore">View more</span></p>
-        <p className='cuisine'>₹ {data.price} for one ( Deliver in {data.delivery_time} min )</p>
-        <p className='address'>
-          Address : {data.address} , {data.area} , {data.city}
-        </p>
+        <span className='text-xs bg-[green] text-white py-1 px-2 rounded-md ml-4'>{data.avg_ratings} ☆</span>
+        <span className='text-xs ml-1'>{data.total_ratings} reviews</span>
+        <p className='text-xs justify-between ml-4 whitespace-nowrap'> <span className="text-blue-500 underline cursor-pointer">{data.food_type.split(',').slice(0, 2).map((item: string) => item + ' · ')}</span></p>
+        <p className='text-xs justify-between ml-4 whitespace-nowrap'>₹ {data.price} for one ( Deliver in {data.delivery_time} min )</p>
 
       </div>
       {/* Modal COmponent */}

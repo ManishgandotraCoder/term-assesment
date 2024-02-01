@@ -27,7 +27,7 @@ describe('RestaurantComponentContainer', () => {
                 sort="restaurant"
                 passFields={passFieldsMock}
                 getCount={getCountMock}
-                counter={10}
+                records_string={'Showing 1 to 50 records'}
             />
         );
 
@@ -47,7 +47,7 @@ describe('RestaurantComponentContainer', () => {
                 sort="restaurant"
                 passFields={passFieldsMock}
                 getCount={getCountMock}
-                counter={10}
+                records_string={'Showing 1 to 50 records'}
             />
         );
 
@@ -66,7 +66,7 @@ describe('RestaurantComponentContainer', () => {
                 sort="avg_ratings"
                 passFields={passFieldsMock}
                 getCount={getCountMock}
-                counter={10}
+                records_string={'Showing 1 to 50 records'}
             />
         );
 
